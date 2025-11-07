@@ -1,0 +1,59 @@
+RÉSUMÉ DES SEGMENTATIONS
+============================================================
+
+Segment 0: Threshold-200-MAX
+  Label value: 1
+  Couleur RGB: 0.568627 0.941176 0.568627
+  ID: Segment_1
+  Nombre de voxels: 204959
+  Fichier: Threshold-200-MAX_label1.nrrd
+
+Segment 1: Femur_R
+  Label value: 2
+  Couleur RGB: 0.509804 0.686275 0.509804
+  ID: Segment_2
+  Nombre de voxels: 426944
+  Fichier: Femur_R_label2.nrrd
+
+Segment 2: Femur_L
+  Label value: 3
+  Couleur RGB: 0.941176 0.843137 0.568627
+  ID: Segment_3
+  Nombre de voxels: 435915
+  Fichier: Femur_L_label3.nrrd
+
+Segment 3: Hip_R
+  Label value: 4
+  Couleur RGB: 0.686275 0.470588 0.392157
+  ID: Segment_4
+  Nombre de voxels: 226722
+  Fichier: Hip_R_label4.nrrd
+
+Segment 4: Hip_L
+  Label value: 5
+  Couleur RGB: 0.431373 0.72549 0.823529
+  ID: Segment_5
+  Nombre de voxels: 220393
+  Fichier: Hip_L_label5.nrrd
+
+Segment 5: Sacrum
+  Label value: 6
+  Couleur RGB: 0.843137 0.392157 0.313725
+  ID: Segment_6
+  Nombre de voxels: 101337
+  Fichier: Sacrum_label6.nrrd
+
+Segment 6: Patella_R
+  Label value: 7
+  Couleur RGB: 0 0.588235 0.803922
+  ID: Segment_7
+  Nombre de voxels: 21530
+  Fichier: Patella_R_label7.nrrd
+
+Segment 7: Patella_L
+  Label value: 8
+  Couleur RGB: 0.862745 0.862745 1
+  ID: Segment_8
+  Nombre de voxels: 21213
+  Fichier: Patella_L_label8.nrrd
+
