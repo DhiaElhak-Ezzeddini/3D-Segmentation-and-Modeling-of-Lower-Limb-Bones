@@ -1,4 +1,4 @@
-import nrrd
+import nrrd # type: ignore
 import numpy as np
 import os
 
@@ -112,7 +112,7 @@ def extraire_segmentations(fichier_nrrd, dossier_sortie="segmentations_extraites
 # Exemple d'utilisation
 if __name__ == "__main__":
     # Remplacer par le chemin de votre fichier NRRD
-    fichier_nrrd = "SMIR.Lower_limb.051Y.F.CT.168-Pelvis-Thighs_Segmentation.seg.nrrd"
+    fichier_nrrd = "CV Dataset\\002\\002\\SMIR.Lower_limb.078Y.F.CT.9\\SMIR.Lower_limb.078Y.F.CT.9-Pelvis-Thighs_Segmentation.seg.nrrd"
     
     # Extraire les segmentations
     try:
