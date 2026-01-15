@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Bone Viewer - Medical Visualization</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="apple-touch-icon" href="images/icons/icon-192.png">
+    <link rel="icon" href="images/favicon.ico">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🦴 3D Bone Viewer</h1>
+                <p>Medical Segmentation Visualization & Surgical Planning</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel - Controls -->
+            <aside class="sidebar">
+                <!-- Upload Section -->
+                <section class="panel upload-panel">
+                    <h2>📤 Upload Segmentation</h2>
+                    <div class="upload-zone" id="upload-zone">
+                        <input type="file" id="file-input" accept=".nii,.nii.gz" hidden>
+                        <div class="upload-content">
+                            <span class="upload-icon">📁</span>
+                            <p><strong>Click</strong> or <strong>drag & drop</strong></p>
+                            <p class="upload-hint">NIfTI files (.nii, .nii.gz)</p>
+                        </div>
+                    </div>
+                    <div id="upload-status" class="upload-status"></div>
+                </section>
+
+                <!-- Bone List -->
+                <section class="panel bones-panel">
+                    <h2>🦴 Bones</h2>
+                    <div id="bone-list" class="bone-list">
+                        <p class="empty-state">Upload a segmentation to see bones</p>
+                    </div>
+                </section>
+
+                <!-- Transform Controls -->
+                <section class="panel transform-panel">
+                    <h2>✋ Transform</h2>
+                    <div class="transform-modes">
+                        <button class="mode-btn" data-mode="translate">
+                            <span>📍</span> Move
+                        </button>
+                        <button class="mode-btn" data-mode="rotate">
+                            <span>🔄</span> Rotate
+                        </button>
+                        <button class="mode-btn" data-mode="scale">
+                            <span>↔️</span> Scale
+                        </button>
+                    </div>
+                    <div id="selected-bone-info" class="selected-info">
+                        <p class="empty-state">Select a bone to transform</p>
+                    </div>
+                    <button id="reset-transform" class="btn btn-secondary" disabled>
+                        Reset Position
+                    </button>
+                </section>
+
+                <!-- Implants -->
+                <section class="panel implants-panel">
+                    <h2>🔧 Implants</h2>
+                    <div class="upload-zone upload-zone-small" id="implant-upload-zone">
+                        <input type="file" id="implant-input" accept=".stl,.ply,.obj" hidden>
+                        <div class="upload-content">
+                            <span class="upload-icon-small">➕</span>
+                            <p>Upload Implant</p>
+                            <p class="upload-hint">STL, PLY, OBJ</p>
+                        </div>
+                    </div>
+                    <div id="implant-list" class="implant-list">
+                        <p class="empty-state">No implants loaded</p>
+                    </div>
+                </section>
+
+                <!-- Camera Controls -->
+                <section class="panel camera-panel">
+                    <h2>📷 Camera</h2>
+                    <div class="camera-presets">
+                        <button class="preset-btn" data-view="top">Top</button>
+                        <button class="preset-btn" data-view="bottom">Bottom</button>
+                        <button class="preset-btn" data-view="left">Left</button>
+                        <button class="preset-btn" data-view="right">Right</button>
+                        <button class="preset-btn" data-view="front">Front</button>
+                        <button class="preset-btn" data-view="back">Back</button>
+                    </div>
+                    <button id="reset-camera" class="btn btn-secondary">
+                        🎯 Reset Camera
+                    </button>
+                </section>
+            </aside>
+
+            <!-- Center - 3D Viewer -->
+            <main class="viewer-container">
+                <div id="loading-overlay" class="loading-overlay hidden">
+                    <div class="spinner"></div>
+                    <p>Processing segmentation...</p>
+                </div>
+                <canvas id="viewer-canvas"></canvas>
+                <div class="viewer-controls">
+                    <button id="toggle-grid" class="icon-btn" title="Toggle Grid">
+                        <span>📐</span>
+                    </button>
+                    <button id="toggle-axes" class="icon-btn" title="Toggle Axes">
+                        <span>📊</span>
+                    </button>
+                    <button id="screenshot" class="icon-btn" title="Take Screenshot">
+                        <span>📸</span>
+                    </button>
+                </div>
+            </main>
+
+            <!-- Right Panel - Info -->
+            <aside class="info-panel">
+                <section class="panel stats-panel">
+                    <h2>📊 Statistics</h2>
+                    <div id="stats-content" class="stats-content">
+                        <p class="empty-state">No segmentation loaded</p>
+                    </div>
+                </section>
+
+                <section class="panel help-panel">
+                    <h2>💡 Controls</h2>
+                    <div class="help-content">
+                        <div class="help-item">
+                            <strong>🖱️ Left Mouse</strong>
+                            <p>Rotate view</p>
+                        </div>
+                        <div class="help-item">
+                            <strong>🖱️ Right Mouse</strong>
+                            <p>Pan view</p>
+                        </div>
+                        <div class="help-item">
+                            <strong>🖱️ Scroll</strong>
+                            <p>Zoom in/out</p>
+                        </div>
+                        <div class="help-item">
+                            <strong>Click Bone</strong>
+                            <p>Select for editing</p>
+                        </div>
+                        <div class="help-item">
+                            <strong>G / R / S</strong>
+                            <p>Move / Rotate / Scale</p>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TransformControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/PLYLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="js/viewer.js"></script>
+    <script src="js/bone-manager-mesh.js"></script>
+    <script src="js/implant-manager.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>
