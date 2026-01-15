@@ -1,14 +1,44 @@
-# 3D Segmentation and Modeling of Lower Limb Bones
+<div align="center">
+
+# 🦴 3D Segmentation and Modeling of Lower Limb Bones
+
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.5+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org)
+[![nnU-Net v2](https://img.shields.io/badge/nnU--Net-v2.6-00ADD8?style=for-the-badge)](https://github.com/MIC-DKFZ/nnUNet)
+[![CUDA 12.1](https://img.shields.io/badge/CUDA-12.1+-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+
+**An end-to-end medical imaging solution for automatic bone segmentation & interactive 3D visualization**
+
+[🚀 Quick Start](#-quick-start-guide) • [📖 Documentation](#-project-overview) • [🖥️ Bone Viewer App](#-3d-bone-viewer-application) • [📊 Results](#-expected-performance)
+
+</div>
+
+---
 
 ## 📋 Project Overview
 
-A comprehensive medical image analysis pipeline for **automatic segmentation of lower limb bones from CT scans** using state-of-the-art deep learning techniques. This project implements a complete workflow from raw CT image preprocessing to model training using **nnU-Net v2** (No New U-Net), a fully automatic deep learning segmentation framework optimized for medical imaging.
+A comprehensive medical image analysis platform combining **state-of-the-art deep learning segmentation** with an **interactive 3D visualization application**. This project delivers a complete clinical workflow from raw CT scan preprocessing to surgical planning visualization.
 
-### Key Objectives
-- **Automated bone segmentation**: Segment 8 anatomical structures (Femur, Hip, Patella, Sacrum) bilaterally plus bone threshold
-- **3D volumetric analysis**: Process full 3D CT volumes for comprehensive spatial analysis
-- **Clinical-grade model**: 5-fold cross-validation on real medical imaging data
-- **Reproducibility**: Complete pipeline for data preparation and model training
+<div align="center">
+
+| 🧠 **AI Segmentation** | 🎨 **3D Visualization** | ⚡ **Production Ready** |
+|:---:|:---:|:---:|
+| nnU-Net v2 powered | Three.js rendering | PWA + Clean Architecture |
+| 8 anatomical classes | Real-time interaction | Offline-capable |
+| 5-fold validation | Medical color schemes | RESTful API |
+
+</div>
+
+### ✨ Key Features
+
+- 🔬 **Automated Bone Segmentation** — Segment 8 anatomical structures (Femur, Hip, Patella, Sacrum) bilaterally with clinical-grade accuracy
+- 📊 **3D Volumetric Analysis** — Process full 3D CT volumes for comprehensive spatial analysis
+- 🖥️ **Interactive Visualization** — Web-based 3D bone viewer with implant planning capabilities
+- 🏗️ **Clean Architecture** — Production-ready backend with scalable domain-centric design
+- 📱 **Progressive Web App** — Installable, offline-capable frontend
+- 🔁 **Reproducible Pipeline** — Complete workflow for data preparation, training, and inference
 
 ---
 
@@ -17,14 +47,18 @@ A comprehensive medical image analysis pipeline for **automatic segmentation of 
 ### Anatomical Targets (8 Classes)
 The pipeline segments the following structures from lower limb CT scans:
 
-| Structure | Count | Side |
-|-----------|-------|------|
-| Femur (Thighbone) | 2 | Left & Right |
-| Hip (Pelvis/Acetabulum) | 2 | Left & Right |
-| Patella (Kneecap) | 2 | Left & Right |
-| Sacrum (Base of Spine) | 1 | Single |
-| Bone Threshold Region | 1 | Single |
-| **Total Classes** | **8** | - |
+<div align="center">
+
+| Structure | Count | Side | Clinical Relevance |
+|:----------|:-----:|:----:|:-------------------|
+| 🦴 Femur (Thighbone) | 2 | Left & Right | Hip/Knee replacement |
+| 🦴 Hip (Pelvis/Acetabulum) | 2 | Left & Right | Hip arthroplasty |
+| 🦴 Patella (Kneecap) | 2 | Left & Right | Knee surgery |
+| 🦴 Sacrum (Base of Spine) | 1 | Single | Spinal procedures |
+| 🦴 Bone Threshold Region | 1 | Single | General analysis |
+| **Total Classes** | **8** | — | — |
+
+</div>
 
 ### Data Characteristics
 - **Dataset Size**: 23+ manually segmented CT cases
@@ -35,11 +69,41 @@ The pipeline segments the following structures from lower limb CT scans:
 
 ---
 
-## 🏗️ Architecture & Workflow
+## 🏗️ System Architecture
+
+This project consists of two major components:
 
 ```
-Complete Pipeline Workflow:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    3D SEGMENTATION & MODELING PLATFORM                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                    🧠 AI SEGMENTATION PIPELINE                       │    │
+│  │                                                                      │    │
+│  │   CT Scans  ──►  nnU-Net v2  ──►  8-Class Segmentation  ──►  NIfTI │    │
+│  │   (NRRD)         (3D U-Net)       (Bone Labels)              (.nii.gz)  │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                    │                                         │
+│                                    ▼                                         │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                    🖥️ 3D BONE VIEWER APPLICATION                    │    │
+│  │                                                                      │    │
+│  │   ┌──────────────┐          ┌──────────────┐          ┌──────────┐ │    │
+│  │   │   Frontend   │  REST    │   Backend    │  Process │  NIfTI   │ │    │
+│  │   │  (PWA/JS)    │◄────────►│  (FastAPI)   │◄────────►│  Files   │ │    │
+│  │   │  Three.js    │   API    │   Python     │          │          │ │    │
+│  │   └──────────────┘          └──────────────┘          └──────────┘ │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
+---
+
+## 🔄 Complete Pipeline Workflow
+
+```
 Step 1: DATA EXTRACTION & CONVERSION
 ├─ Extract individual bone segments from segmentation files
 ├─ Convert NRRD → NIfTI format (.nii.gz)
@@ -78,6 +142,14 @@ Step 5: INFERENCE & VALIDATION
 ├─ Generate probability maps and segmentations
 ├─ Compute validation metrics (Dice, IoU)
 └─ Export results in standard formats
+
+              ↓
+
+Step 6: 3D VISUALIZATION & PLANNING
+├─ Load segmentation results in Bone Viewer
+├─ Interactive 3D bone visualization
+├─ Implant placement simulation
+└─ Surgical planning support
 ```
 
 ---
@@ -87,33 +159,55 @@ Step 5: INFERENCE & VALIDATION
 ```
 3D-Segmentation-and-Modeling-of-Lower-Limb-Bones/
 │
-├── Data Preparation/                    (Core pipeline scripts)
-│   ├── prepare_for_nnunet.py           (Full dataset preparation)
-│   ├── prepare_for_nnunet_new.py       (Filtered dataset - 8 labels)
-│   ├── preprocess_only.py              (Preprocessing without training)
-│   ├── train_nnunet.py                 (Complete training pipeline)
-│   ├── train_single_fold.py            (Individual fold training)
-│   ├── check_training_progress.py      (Monitor training status)
-│   ├── setup_env_vars.ps1              (Environment configuration)
-│   ├── test.ipynb                      (Testing & validation notebook)
-│   ├── nnUNet_raw_data/               (Raw training data)
-│   ├── nnUNet_preprocessed/           (Preprocessed data - auto-generated)
-│   └── nnUNet_results/                (Training results - auto-generated)
+├── 📂 Data Preparation/                    # Core AI pipeline scripts
+│   ├── prepare_for_nnunet.py              # Full dataset preparation
+│   ├── prepare_for_nnunet_new.py          # Filtered dataset - 8 labels
+│   ├── preprocess_only.py                 # Preprocessing without training
+│   ├── train_nnunet.py                    # Complete training pipeline
+│   ├── train_single_fold.py               # Individual fold training
+│   ├── check_training_progress.py         # Monitor training status
+│   ├── setup_env_vars.ps1                 # Environment configuration
+│   ├── test.ipynb                         # Testing & validation notebook
+│   ├── nnUNet_raw_data/                   # Raw training data
+│   ├── nnUNet_preprocessed/               # Preprocessed data (auto-generated)
+│   └── nnUNet_results/                    # Training results (auto-generated)
 │
-├── CV Dataset/                          (Raw medical imaging data)
-│   └── 002/, 006/, 010/, ..., z066/   (30+ subjects with NRRD files)
+├── 📂 bone_viewer_app/                     # 🖥️ 3D Visualization Application
+│   ├── Medical_Image_Segmentation.ipynb   # Inference notebook
+│   ├── backend/                           # FastAPI backend (Clean Architecture)
+│   │   ├── main.py                        # Entry point
+│   │   ├── requirements.txt               # Backend dependencies
+│   │   ├── src/                           # Clean Architecture source
+│   │   │   ├── domain/                    # Entities & Interfaces
+│   │   │   ├── application/               # Business logic (Services)
+│   │   │   ├── infrastructure/            # External adapters
+│   │   │   └── presentation/              # API Layer (FastAPI routes)
+│   │   └── uploads/                       # Data storage
+│   └── frontend/                          # PWA Frontend
+│       ├── index.html                     # PWA entry point
+│       ├── manifest.json                  # PWA manifest
+│       ├── sw.js                          # Service Worker (offline support)
+│       ├── css/                           # Stylesheets
+│       ├── js/                            # JavaScript modules (Three.js)
+│       └── images/                        # Assets & icons
 │
-├── nnUNet_preds/                        (Inference predictions)
-│   ├── PELVISTHIGHS_001.nii.gz        (Prediction results)
-│   ├── dataset.json                    (Configuration)
-│   ├── plans.json                      (Inference plans)
+├── 📂 CV Dataset/                          # Raw medical imaging data
+│   └── 002/, 006/, ..., z066/             # 30+ subjects with NRRD files
+│
+├── 📂 nnUNet_preds/                        # Inference predictions
+│   ├── PELVISTHIGHS_001.nii.gz            # Prediction results
+│   ├── dataset.json                       # Configuration
+│   ├── plans.json                         # Inference plans
 │   └── predict_from_raw_data_args.json
 │
-├── 3D-Segmentation/                     (Python virtual environment)
+├── 📂 nnUNet_results/                      # Trained model checkpoints
+│   └── Dataset001_PelvisThighs/           # Model outputs
+│
+├── 📂 3D-Segmentation/                     # Python virtual environment
 │   └── (Pre-configured with all dependencies)
 │
-├── README.md                            (This file)
-└── test.py                              (Quick testing script)
+├── README.md                               # This documentation
+└── test.py                                 # Quick testing script
 ```
 
 ---
@@ -121,10 +215,18 @@ Step 5: INFERENCE & VALIDATION
 ## 🔧 Installation & Setup
 
 ### Prerequisites
-- **Python 3.10+** (3.12 recommended)
-- **NVIDIA GPU** with CUDA 12.1+ support (strongly recommended)
-- **RAM**: 16GB minimum (32GB+ recommended)
-- **Storage**: 100GB+ for dataset, preprocessing, and results
+
+<div align="center">
+
+| Requirement | Minimum | Recommended |
+|:------------|:--------|:------------|
+| **Python** | 3.10+ | 3.12 |
+| **GPU** | NVIDIA (CUDA 11.8+) | CUDA 12.1+ |
+| **VRAM** | 8 GB | 24 GB+ |
+| **RAM** | 16 GB | 32 GB+ |
+| **Storage** | 50 GB | 100 GB+ |
+
+</div>
 
 ### 1. Navigate to Project
 ```powershell
@@ -140,7 +242,7 @@ The project includes a pre-configured virtual environment in `3D-Segmentation/`:
 ### 3. Set Environment Variables
 ```powershell
 # Option A: Run PowerShell setup script
-.\Data Preparation\setup_env_vars.ps1
+.\Data` Preparation\setup_env_vars.ps1
 
 # Option B: Manual setup
 $env:nnUNet_raw = "d:\3D-Segmentation-and-Modeling-of-Lower-Limb-Bones\Data Preparation\nnUNet_raw_data"
@@ -149,6 +251,10 @@ $env:nnUNet_results = "d:\3D-Segmentation-and-Modeling-of-Lower-Limb-Bones\Data 
 ```
 
 ### 4. Key Dependencies
+
+<details>
+<summary>📦 Click to expand full dependency list</summary>
+
 Pre-installed in the virtual environment:
 - **nnunetv2** (2.6.2) - Medical image segmentation framework
 - **PyTorch** (2.5.1 with CUDA 12.1) - Deep learning
@@ -157,42 +263,214 @@ Pre-installed in the virtual environment:
 - **scipy** (1.16.3) - Scientific computing
 - **numpy** (2.3.4) - Numerical operations
 - **SimpleITK** (2.5.2) - Medical image processing
+- **FastAPI** (0.115+) - REST API framework
+- **Three.js** - WebGL 3D rendering
+
+</details>
 
 ---
 
 ## 🚀 Quick Start Guide
 
-### Option 1: Complete Pipeline (Recommended)
+<div align="center">
+
+### Choose Your Workflow
+
+</div>
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🧠 AI Segmentation Pipeline
+
+#### Option 1: Complete Pipeline (Recommended)
 ```powershell
 cd "Data Preparation"
-# Prepare filtered dataset (8-label Pelvis-Thighs only)
+
+# Prepare filtered dataset (8-label)
 python prepare_for_nnunet_new.py
 
-# Train the model (5-fold cross-validation)
+# Train the model (5-fold CV)
 python train_nnunet.py
 
-# Monitor training progress
+# Monitor progress
 python check_training_progress.py
 ```
 
-### Option 2: Full Dataset (All Structures)
+#### Option 2: Full Dataset
 ```powershell
 cd "Data Preparation"
 python prepare_for_nnunet.py
 python train_nnunet.py
 ```
 
-### Option 3: Preprocessing Only (No Training)
+#### Option 3: Preprocessing Only
 ```powershell
 cd "Data Preparation"
 python preprocess_only.py
 ```
 
-### Option 4: Train Specific Fold
+#### Option 4: Train Specific Fold
 ```powershell
 cd "Data Preparation"
 python train_single_fold.py --fold 0
-python train_single_fold.py --fold 1 --continue  # Resume training
+python train_single_fold.py --fold 1 --continue
+```
+
+</td>
+<td width="50%" valign="top">
+
+### 🖥️ Bone Viewer Application
+
+#### Step 1: Start Backend
+```powershell
+cd bone_viewer_app/backend
+
+# Install dependencies (first time)
+pip install -r requirements.txt
+
+# Run server
+python main.py
+```
+> API: `http://localhost:8001`
+
+#### Step 2: Start Frontend
+```powershell
+cd bone_viewer_app/frontend
+
+# Serve PWA
+python -m http.server 8080
+```
+> Web App: `http://localhost:8080`
+
+#### Step 3: Use the App
+1. Open browser to `localhost:8080`
+2. Drag & drop `.nii.gz` file
+3. Explore 3D visualization
+4. Add implants for planning
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🖥️ 3D Bone Viewer Application
+
+<div align="center">
+
+![Bone Viewer Demo](bone_viewer_app/images/example.png)
+
+*Interactive 3D visualization of segmented bones with surgical planning capabilities*
+
+</div>
+
+### Overview
+
+The **3D Bone Viewer** is a full-stack medical visualization application designed for surgeons, radiologists, and medical professionals. It provides real-time 3D rendering of segmented bone structures with support for surgical implant planning.
+
+### ✨ Application Features
+
+<div align="center">
+
+| Feature | Description |
+|:--------|:------------|
+| 🏗️ **Clean Architecture** | Scalable, domain-centric backend design |
+| 📱 **Progressive Web App** | Installable, offline-capable, and responsive |
+| 🦴 **NIfTI Processing** | Automatic bone extraction from segmentation files |
+| 🎨 **Medical Visualization** | High-fidelity 3D rendering with medical color schemes |
+| ✋ **Interactive Controls** | Move, rotate, and scale bones in real-time |
+| 🔧 **Implant System** | Support for STL, PLY, and OBJ implant files |
+| 🔒 **Secure Data Handling** | Organized file storage and processing |
+
+</div>
+
+### 🛠️ Technology Stack
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                         FRONTEND                              │
+│  ┌──────────────────────────────────────────────────────┐    │
+│  │  HTML5 │ CSS3 (Light Theme) │ JavaScript (ES Modules)│    │
+│  │           Three.js (WebGL 3D Rendering)              │    │
+│  │           PWA: Manifest + Service Worker              │    │
+│  └──────────────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                         REST API
+                              │
+┌──────────────────────────────────────────────────────────────┐
+│                    BACKEND (Clean Architecture)               │
+│  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌───────────┐ │
+│  │  Domain    │ │Application │ │Infrastructure│ │Presentation│ │
+│  │  Entities  │ │  Services  │ │  Adapters   │ │  FastAPI   │ │
+│  │ Interfaces │ │   Logic    │ │ File System │ │   Routes   │ │
+│  └────────────┘ └────────────┘ └────────────┘ └───────────┘ │
+│                     Nibabel │ NumPy │ SciPy                   │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### 🚀 Running the Bone Viewer
+
+#### 1. Start the Backend Server
+
+```powershell
+cd bone_viewer_app/backend
+pip install -r requirements.txt
+python main.py
+```
+> 🌐 API available at `http://localhost:8001`
+
+#### 2. Launch the Frontend (PWA)
+
+```powershell
+cd bone_viewer_app/frontend
+python -m http.server 8080
+```
+> 🌐 Open `http://localhost:8080` in Chrome/Edge
+
+### 📖 Usage Guide
+
+<div align="center">
+
+| Step | Action | Description |
+|:----:|:-------|:------------|
+| 1️⃣ | **Install App** | Click the install icon in your browser to add as desktop/mobile app |
+| 2️⃣ | **Upload** | Drag & drop a `.nii.gz` segmentation file |
+| 3️⃣ | **Visualize** | Bones are automatically extracted and displayed in 3D |
+| 4️⃣ | **Interact** | Rotate, zoom, and pan to explore the anatomy |
+| 5️⃣ | **Plan** | Upload `.stl` or `.ply` implants for surgical planning |
+| 6️⃣ | **Offline** | App works offline after initial cache (backend needed for new processing) |
+
+</div>
+
+### 🏛️ Clean Architecture Principles
+
+The backend follows the **Dependency Rule** ensuring maintainability and testability:
+
+```
+                    ┌─────────────────────┐
+                    │    Presentation     │  ← FastAPI routes, DTOs
+                    │   (Web Interface)   │
+                    └─────────┬───────────┘
+                              │
+                    ┌─────────▼───────────┐
+                    │    Application      │  ← Use cases, orchestration
+                    │    (Services)       │
+                    └─────────┬───────────┘
+                              │
+                    ┌─────────▼───────────┐
+                    │      Domain         │  ← Entities, business rules
+                    │  (Core Business)    │
+                    └─────────────────────┘
+                              ▲
+                    ┌─────────┴───────────┐
+                    │   Infrastructure    │  ← File I/O, external libs
+                    │    (Adapters)       │
+                    └─────────────────────┘
+
+Key: Domain knows nothing about outer layers
 ```
 
 ---
@@ -282,18 +560,28 @@ Final Segmentation: Multi-label 3D volume
 
 ## 📈 Expected Performance
 
+<div align="center">
+
 ### Validation Metrics
-- **Dice Similarity Coefficient**: Per-class and foreground
-- **Hausdorff Distance**: Surface distance accuracy
-- **Intersection-over-Union (IoU)**: Overlap accuracy
 
-### Training Timeline (Estimated)
-- **Preprocessing**: 10-30 minutes
-- **Per Fold Training**: 4-8 hours (GPU-dependent)
-- **Total Training (5 folds)**: 20-40 hours
-- **Complete Pipeline**: 1-2 days
+| Metric | Description | Target |
+|:-------|:------------|:-------|
+| **Dice Similarity** | Volume overlap accuracy | > 0.90 |
+| **Hausdorff Distance** | Surface distance (mm) | < 5.0 |
+| **IoU** | Intersection-over-Union | > 0.85 |
 
-*Based on NVIDIA RTX 3090/4090 with 24GB VRAM*
+### ⏱️ Training Timeline
+
+| Phase | Duration | Notes |
+|:------|:---------|:------|
+| Preprocessing | 10-30 min | One-time setup |
+| Per Fold Training | 4-8 hours | GPU-dependent |
+| Total Training (5 folds) | 20-40 hours | Can run in parallel |
+| **Complete Pipeline** | **1-2 days** | End-to-end |
+
+<sub>*Benchmarked on NVIDIA RTX 3090/4090 (24GB VRAM)*</sub>
+
+</div>
 
 ---
 
@@ -390,37 +678,61 @@ python train_single_fold.py --fold 0 --continue
 
 ---
 
-## 📚 References & Further Reading
+## 📚 References & Resources
 
-- **nnU-Net v2**: Isensee et al., Nature Methods (2021)
-- **PyTorch**: Official framework documentation
-- **NIfTI Format**: Neuroimaging Informatics Technology Initiative
-- [nnU-Net Official Documentation](https://github.com/MIC-DKFZ/nnUNet)
-- [U-Net: Convolutional Networks for Biomedical Image Segmentation](https://arxiv.org/abs/1505.04597)
+<div align="center">
+
+| Resource | Link |
+|:---------|:-----|
+| 📖 nnU-Net v2 Paper | Isensee et al., *Nature Methods* (2021) |
+| 🔗 nnU-Net GitHub | [MIC-DKFZ/nnUNet](https://github.com/MIC-DKFZ/nnUNet) |
+| 📖 U-Net Paper | [arXiv:1505.04597](https://arxiv.org/abs/1505.04597) |
+| 🔥 PyTorch Docs | [pytorch.org/docs](https://pytorch.org/docs) |
+| 🧊 Three.js Docs | [threejs.org/docs](https://threejs.org/docs) |
+| 🏥 NIfTI Format | Neuroimaging Informatics Technology Initiative |
+
+</div>
 
 ---
 
 ## 🐛 Troubleshooting
 
-### GPU Not Detected
+<details>
+<summary><b>🔴 GPU Not Detected</b></summary>
+
 ```powershell
-python -c "import torch; print(torch.cuda.is_available())"
+python -c "import torch; print(f'CUDA Available: {torch.cuda.is_available()}')"
 python -c "import torch; print(torch.cuda.get_device_properties(0))"
 ```
 
-### Memory Errors During Training
+**Solution**: Ensure NVIDIA drivers and CUDA toolkit are properly installed.
+
+</details>
+
+<details>
+<summary><b>🔴 Memory Errors During Training</b></summary>
+
 ```powershell
-nvidia-smi  # Check VRAM
-# Reduce batch size in plans.json or use 2d config
+nvidia-smi  # Check VRAM usage
 ```
 
-### Missing Dependencies
+**Solution**: Reduce batch size in `plans.json` or use `2d` configuration instead of `3d_fullres`.
+
+</details>
+
+<details>
+<summary><b>🔴 Missing Dependencies</b></summary>
+
 ```powershell
 pip install --upgrade nnunetv2
 python -c "import nnunetv2; print(nnunetv2.__version__)"
 ```
 
-### Data Not Found
+</details>
+
+<details>
+<summary><b>🔴 Data Not Found</b></summary>
+
 ```powershell
 echo $env:nnUNet_raw
 echo $env:nnUNet_preprocessed
@@ -428,22 +740,26 @@ echo $env:nnUNet_results
 dir "Data Preparation/nnUNet_raw_data/Dataset001_LowerLimb"
 ```
 
----
+**Solution**: Verify environment variables are set correctly.
 
-## 📝 Project Information
+</details>
 
-- **Framework**: nnU-Net v2 (Automatic Medical Image Segmentation)
-- **Task**: Multi-class 3D segmentation
-- **Input**: CT images (NRRD/NIfTI format)
-- **Output**: 8-class segmentation masks
-- **Validation**: 5-fold cross-validation
-- **GPU Support**: NVIDIA CUDA 12.1+
+<details>
+<summary><b>🔴 Bone Viewer Not Loading</b></summary>
+
+1. Ensure backend is running on port 8001
+2. Check browser console for CORS errors
+3. Try clearing browser cache
+4. Use Chrome or Edge for best PWA support
+
+</details>
 
 ---
 
 ## ✅ Checklist for First-Time Users
 
-- [ ] Activate virtual environment
+### AI Segmentation Pipeline
+- [ ] Activate virtual environment (`.\3D-Segmentation\Scripts\Activate.ps1`)
 - [ ] Set nnU-Net environment variables
 - [ ] Verify GPU availability
 - [ ] Run `prepare_for_nnunet_new.py` (data preparation)
@@ -451,8 +767,39 @@ dir "Data Preparation/nnUNet_raw_data/Dataset001_LowerLimb"
 - [ ] Monitor with `check_training_progress.py`
 - [ ] Analyze results in `nnUNet_results/`
 
+### 3D Bone Viewer Application
+- [ ] Install backend dependencies (`pip install -r requirements.txt`)
+- [ ] Start backend server (`python main.py`)
+- [ ] Launch frontend (`python -m http.server 8080`)
+- [ ] Install PWA in browser (optional)
+- [ ] Upload segmentation results for visualization
+
 ---
 
-**Last Updated**: January 2026  
-**Status**: Active Development  
-**Version**: 1.0
+<div align="center">
+
+## 📬 Contact & Support
+
+For questions, issues, or contributions, please open an issue in this repository.
+
+---
+
+### 📝 Project Information
+
+| Attribute | Details |
+|:----------|:--------|
+| **Framework** | nnU-Net v2 (Automatic Medical Image Segmentation) |
+| **Task** | Multi-class 3D segmentation + Interactive visualization |
+| **Input** | CT images (NRRD/NIfTI format) |
+| **Output** | 8-class segmentation masks + 3D rendered models |
+| **Validation** | 5-fold cross-validation |
+| **GPU Support** | NVIDIA CUDA 12.1+ |
+| **License** | MIT |
+
+---
+
+**Last Updated**: January 2026 | **Status**: 🟢 Active Development | **Version**: 2.0
+
+<sub>Made with ❤️ for the medical imaging community</sub>
+
+</div>
